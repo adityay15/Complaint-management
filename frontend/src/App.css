@@ -1,0 +1,334 @@
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  padding: 20px 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  font-size: 20px;
+}
+
+.app-columns {
+  flex: 1;
+  display: flex;
+  gap: 24px;
+  padding: 24px 32px;
+  align-items: flex-start;
+}
+
+.app-column {
+  min-width: 0;
+}
+
+.app-column--form {
+  flex: 1 1 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.app-column--chat {
+  flex: 1 1 420px;
+  position: sticky;
+  top: 24px;
+}
+
+/* Complaint form */
+
+.complaint-form {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.complaint-form h2 {
+  font-size: 18px;
+}
+
+.complaint-form__hint {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.7;
+  margin-top: 6px;
+  margin-bottom: 20px;
+}
+
+.complaint-form__group {
+  border: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.complaint-form__group legend {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+.complaint-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.complaint-form__field:last-child {
+  margin-bottom: 0;
+}
+
+.complaint-form__field input,
+.complaint-form__field textarea {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--accent-bg);
+  color: var(--text-h);
+  resize: vertical;
+}
+
+.complaint-form__field input:focus,
+.complaint-form__field textarea:focus {
+  outline: none;
+}
+
+.complaint-form__status {
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.complaint-form__status--success {
+  color: var(--severity-minor);
+}
+
+.complaint-form__status--error {
+  color: var(--severity-critical);
+}
+
+.complaint-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.complaint-form__actions button {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.complaint-form__actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.complaint-form__reset {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-h);
+}
+
+.complaint-form__save {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+}
+
+/* Risk assessment panel */
+
+.risk-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.risk-panel h3 {
+  font-size: 15px;
+  margin-bottom: 16px;
+}
+
+.risk-panel__empty {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+.risk-panel__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.risk-panel__row--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  border-bottom: none;
+}
+
+.risk-panel__row--stacked p {
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.risk-panel__label {
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.risk-badge {
+  display: inline-flex;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.risk-badge--critical,
+.risk-badge--high {
+  color: var(--severity-critical);
+  background: var(--severity-critical-bg);
+}
+
+.risk-badge--major,
+.risk-badge--medium {
+  color: var(--severity-major);
+  background: var(--severity-major-bg);
+}
+
+.risk-badge--minor,
+.risk-badge--low {
+  color: var(--severity-minor);
+  background: var(--severity-minor-bg);
+}
+
+/* Chat panel */
+
+.chat-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px);
+}
+
+.chat-panel h2 {
+  font-size: 16px;
+}
+
+.chat-panel__hint {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-top: 6px;
+  margin-bottom: 16px;
+}
+
+.chat-panel__messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.chat-panel__empty {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.chat-message {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 145%;
+}
+
+.chat-message--user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-message--assistant {
+  align-self: flex-start;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-message--pending {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.chat-panel__input {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.chat-panel__input textarea {
+  flex: 1;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  resize: none;
+}
+
+.chat-panel__input button {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+.chat-panel__input button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-panel__input .chat-panel__attach {
+  padding: 10px 14px;
+  background: var(--accent-bg);
+  font-size: 16px;
+}
