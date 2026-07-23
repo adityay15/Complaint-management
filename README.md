@@ -128,5 +128,3 @@ frontend/
 
 ---
 
-**Submission**: AIVOA Round 1 Full Stack Developer Assessment  
-**Date**: 2026-07-24
