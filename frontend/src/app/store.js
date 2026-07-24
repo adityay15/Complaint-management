@@ -3,6 +3,7 @@ import complaintFormReducer from '../features/complaint/complaintFormSlice'
 import riskAssessmentReducer from '../features/complaint/riskAssessmentSlice'
 import rootCauseReducer from '../features/complaint/rootCauseSlice'
 import completenessReducer from '../features/complaint/completenessSlice'
+import summaryReducer from '../features/complaint/summarySlice'
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     riskAssessment: riskAssessmentReducer,
     rootCause: rootCauseReducer,
     completeness: completenessReducer,
+    summary: summaryReducer,
   },
 })

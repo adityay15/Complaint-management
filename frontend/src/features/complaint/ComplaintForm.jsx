@@ -5,6 +5,7 @@ import { formReset } from './complaintFormSlice'
 import { riskReset } from './riskAssessmentSlice'
 import { rootCauseReset } from './rootCauseSlice'
 import { completenessReset } from './completenessSlice'
+import { summaryReset } from './summarySlice'
 
 const FIELD_GROUPS = [
   {
@@ -73,6 +74,7 @@ function ComplaintForm() {
     dispatch(riskReset())
     dispatch(rootCauseReset())
     dispatch(completenessReset())
+    dispatch(summaryReset())
     setSaveStatus(null)
   }
 

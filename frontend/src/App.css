@@ -442,3 +442,32 @@
   margin-bottom: 4px;
   line-height: 145%;
 }
+
+/* Summary panel */
+
+.summary-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.summary-panel h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.summary-panel__empty {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.7;
+  margin: 0;
+}
+
+.summary-panel__text {
+  font-size: 13px;
+  color: var(--text-h);
+  line-height: 160%;
+  margin: 0;
+  font-style: italic;
+}

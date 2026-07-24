@@ -5,6 +5,7 @@ import { fieldsUpdated } from '../complaint/complaintFormSlice'
 import { riskAssessmentUpdated } from '../complaint/riskAssessmentSlice'
 import { rootCauseUpdated } from '../complaint/rootCauseSlice'
 import { completenessUpdated } from '../complaint/completenessSlice'
+import { summaryUpdated } from '../complaint/summarySlice'
 
 function summarizeUpdate(extractedFields) {
   const changedKeys = Object.keys(extractedFields)
@@ -39,6 +40,7 @@ function ChatPanel() {
       dispatch(riskAssessmentUpdated(result.risk_assessment))
       dispatch(rootCauseUpdated(result.root_cause_recommendation))
       dispatch(completenessUpdated(result.completeness))
+      dispatch(summaryUpdated(result.summary))
       addMessage('assistant', summarizeUpdate(result.extracted_fields))
     } catch (error) {
       addMessage('assistant', `Something went wrong: ${error.message}`)

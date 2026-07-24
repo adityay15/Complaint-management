@@ -1,6 +1,7 @@
 import ComplaintForm from './features/complaint/ComplaintForm'
 import RiskAssessmentPanel from './features/complaint/RiskAssessmentPanel'
 import RootCausePanel from './features/complaint/RootCausePanel'
+import SummaryPanel from './features/complaint/SummaryPanel'
 import ChatPanel from './features/chat/ChatPanel'
 import './App.css'
 
@@ -14,6 +15,7 @@ function App() {
       <main className="app-columns">
         <section className="app-column app-column--form">
           <ComplaintForm />
+          <SummaryPanel />
           <RiskAssessmentPanel />
           <RootCausePanel />
         </section>

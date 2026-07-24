@@ -33,6 +33,7 @@ def extract_complaint(payload: ComplaintState):
         risk_assessment=result["risk_assessment"],
         root_cause_recommendation=result["root_cause_recommendation"],
         completeness=completeness,
+        summary=result["summary"],
     )
 
 

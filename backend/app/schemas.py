@@ -26,11 +26,16 @@ class Completeness(BaseModel):
     missing_recommended: list
 
 
+class Summary(BaseModel):
+    summary: str
+
+
 class ComplaintDelta(BaseModel):
     extracted_fields: dict
     risk_assessment: RiskAssessment
     root_cause_recommendation: RootCauseRecommendation
     completeness: Completeness
+    summary: Summary
 
 
 class DocumentParseResponse(BaseModel):
