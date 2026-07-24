@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { extractComplaint, parseDocument } from '../../api/extractApi'
 import { fieldsUpdated } from '../complaint/complaintFormSlice'
@@ -22,7 +22,24 @@ function ChatPanel() {
   const [messages, setMessages] = useState([])
   const [draft, setDraft] = useState('')
   const [isSending, setIsSending] = useState(false)
+  const [dragActive, setDragActive] = useState(false)
+  const [progress, setProgress] = useState(0)
   const fileInputRef = useRef(null)
+
+  // Animate a simulated progress bar while the AI is working. Real % isn't
+  // available from an LLM call, so we climb smoothly toward ~90% and let the
+  // completed response snap it to done.
+  useEffect(() => {
+    if (!isSending) {
+      setProgress(0)
+      return
+    }
+    setProgress(10)
+    const interval = setInterval(() => {
+      setProgress((prev) => (prev >= 90 ? prev : prev + Math.random() * 12))
+    }, 400)
+    return () => clearInterval(interval)
+  }, [isSending])
 
   const addMessage = (role, text) => {
     setMessages((prev) => [...prev, { id: crypto.randomUUID(), role, text }])
@@ -65,9 +82,7 @@ function ChatPanel() {
     }
   }
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0]
-    event.target.value = ''
+  const processFile = async (file) => {
     if (!file || isSending) return
 
     addMessage('user', `📄 Uploaded: ${file.name}`)
@@ -90,18 +105,78 @@ function ChatPanel() {
     }
   }
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]
+    event.target.value = ''
+    processFile(file)
+  }
+
+  const handleDragOver = (event) => {
+    event.preventDefault()
+    if (!isSending) setDragActive(true)
+  }
+
+  const handleDragLeave = (event) => {
+    event.preventDefault()
+    setDragActive(false)
+  }
+
+  const handleDrop = (event) => {
+    event.preventDefault()
+    setDragActive(false)
+    if (isSending) return
+    const file = event.dataTransfer.files[0]
+    processFile(file)
+  }
+
   return (
-    <div className="chat-panel">
-      <h2>AI Co-Pilot Chat</h2>
+    <div
+      className={`chat-panel${dragActive ? ' chat-panel--drag' : ''}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      {dragActive && (
+        <div className="chat-panel__overlay">
+          <div className="chat-panel__overlay-inner">
+            <span className="chat-panel__overlay-icon">⬇</span>
+            <p>Drop your document to extract</p>
+          </div>
+        </div>
+      )}
+
+      <div className="chat-panel__head">
+        <h2>AI Complaint Intake Assistant</h2>
+        <span className="chat-panel__beta">BETA</span>
+      </div>
       <p className="chat-panel__hint">
         Describe a complaint, send a follow-up correction, or upload a
-        PDF/Word/email — the form and risk assessment update automatically.
+        document — the form and risk assessment update automatically.
       </p>
 
       <div className="chat-panel__messages">
-        {messages.length === 0 && (
-          <p className="chat-panel__empty">No messages yet.</p>
+        {messages.length === 0 && !isSending && (
+          <>
+            <button
+              type="button"
+              className="chat-dropzone"
+              onClick={() => fileInputRef.current.click()}
+            >
+              <span className="chat-dropzone__icon">☁</span>
+              <span className="chat-dropzone__title">
+                Drag &amp; drop a complaint document
+              </span>
+              <span className="chat-dropzone__hint">or click to browse</span>
+              <span className="chat-dropzone__formats">
+                Supported: PDF, DOCX, TXT, EML · Max 10MB
+              </span>
+            </button>
+            <p className="chat-dropzone__or">
+              — or type the complaint below to get started —
+            </p>
+          </>
         )}
+
         {messages.map((message) => (
           <div
             key={message.id}
@@ -110,9 +185,22 @@ function ChatPanel() {
             {message.text}
           </div>
         ))}
+
         {isSending && (
-          <div className="chat-message chat-message--assistant chat-message--pending">
-            Thinking...
+          <div className="chat-progress">
+            <div className="chat-progress__header">
+              <span>Extraction in progress</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+            <div className="chat-progress__track">
+              <div
+                className="chat-progress__bar"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="chat-progress__status">
+              Analyzing content and extracting key details…
+            </p>
           </div>
         )}
       </div>
@@ -125,21 +213,12 @@ function ChatPanel() {
           onChange={handleFileChange}
           style={{ display: 'none' }}
         />
-        <button
-          type="button"
-          className="chat-panel__attach"
-          onClick={() => fileInputRef.current.click()}
-          disabled={isSending}
-          title="Upload a PDF, Word document, or email"
-        >
-          📎
-        </button>
         <textarea
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="e.g. Customer reported batch B12345 of Paracetamol 500mg is discolored..."
-          rows={3}
+          rows={4}
           disabled={isSending}
         />
         <button

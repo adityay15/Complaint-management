@@ -46,6 +46,8 @@ User message:
 
 Extract only fields whose value is stated or clearly implied in the user message, AND is new or different from the current form above. Do not repeat a field that is already correct in the current form. Do not guess or infer a field from context alone (e.g. complaint_source is the channel the customer used to report the complaint, such as phone call/email/in-person/letter — only include it if the message itself states that channel; never infer it just because this message is a chat message). If the message describes the problem itself, capture it in detailed_complaint_description.
 
+complaint_type is a short category label for the nature of the problem (e.g. "Discoloration", "Odor Issue", "Packaging Defect", "Broken/Damaged Product", "Adverse Reaction", "Short Quantity", "Mislabeling"). Unlike complaint_source, DO categorize complaint_type from the problem description in the message — this is expected inference, not guessing.
+
 Return ONLY a JSON object with the fields to add or change. Example:
 {{"customer_name": "Jane Doe", "product_name": "Aspirin 100mg", "quantity_affected": "500 units", "detailed_complaint_description": "Tablets found broken inside sealed blister pack"}}
 or, if nothing should change:
