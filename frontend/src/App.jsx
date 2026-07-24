@@ -9,7 +9,12 @@ function App() {
   return (
     <div className="app-layout">
       <header className="app-header">
-        <h1>Complaint Management</h1>
+        <div className="app-header__mark">✚</div>
+        <div className="app-header__titles">
+          <h1>Complaint Management</h1>
+          <span className="app-header__tag">AI-Powered Intake · Pharma QA</span>
+        </div>
+        <span className="app-header__beta">BETA</span>
       </header>
 
       <main className="app-columns">

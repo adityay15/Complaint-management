@@ -52,6 +52,15 @@ function ComplaintForm() {
   const isFormEmpty = Object.values(formState).every((value) => !value)
   const canSave = !isFormEmpty && completeness.is_complete
 
+  let statusBadge
+  if (isFormEmpty) {
+    statusBadge = { label: 'Awaiting Input', tone: 'neutral' }
+  } else if (completeness.missing_critical.length > 0) {
+    statusBadge = { label: 'Pending Triage', tone: 'warning' }
+  } else {
+    statusBadge = { label: 'Ready to Save', tone: 'success' }
+  }
+
   const handleSave = async () => {
     setIsSaving(true)
     setSaveStatus(null)
@@ -80,11 +89,17 @@ function ComplaintForm() {
 
   return (
     <div className="complaint-form">
-      <h2>Log Customer Complaint</h2>
-      <p className="complaint-form__hint">
-        This form is filled and updated by the AI assistant — describe the
-        complaint in the chat panel to get started.
-      </p>
+      <div className="complaint-form__header">
+        <div>
+          <h2>Log Customer Complaint</h2>
+          <p className="complaint-form__subtitle">
+            API &amp; FDF Quality Assurance Module
+          </p>
+        </div>
+        <span className={`complaint-form__badge complaint-form__badge--${statusBadge.tone}`}>
+          {statusBadge.label}
+        </span>
+      </div>
 
       {!isFormEmpty && completeness.missing_critical.length > 0 && (
         <div className="complaint-form__warning">
@@ -103,24 +118,33 @@ function ComplaintForm() {
       {FIELD_GROUPS.map((group) => (
         <fieldset key={group.title} className="complaint-form__group">
           <legend>{group.title}</legend>
-          {group.fields.map((field) => (
-            <label key={field.key} className="complaint-form__field">
-              <span>{field.label}</span>
-              {field.multiline ? (
-                <textarea
-                  value={formState[field.key] ?? ''}
-                  readOnly
-                  rows={3}
-                />
-              ) : (
-                <input
-                  type="text"
-                  value={formState[field.key] ?? ''}
-                  readOnly
-                />
-              )}
-            </label>
-          ))}
+          <div className="complaint-form__grid">
+            {group.fields.map((field) => (
+              <label
+                key={field.key}
+                className={`complaint-form__field${
+                  field.multiline ? ' complaint-form__field--full' : ''
+                }`}
+              >
+                <span>{field.label}</span>
+                {field.multiline ? (
+                  <textarea
+                    value={formState[field.key] ?? ''}
+                    placeholder="Awaiting AI extraction…"
+                    readOnly
+                    rows={3}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={formState[field.key] ?? ''}
+                    placeholder="Awaiting AI extraction…"
+                    readOnly
+                  />
+                )}
+              </label>
+            ))}
+          </div>
         </fieldset>
       ))}
 
