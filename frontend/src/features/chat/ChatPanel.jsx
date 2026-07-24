@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { extractComplaint, parseDocument } from '../../api/extractApi'
 import { fieldsUpdated } from '../complaint/complaintFormSlice'
 import { riskAssessmentUpdated } from '../complaint/riskAssessmentSlice'
+import { rootCauseUpdated } from '../complaint/rootCauseSlice'
+import { completenessUpdated } from '../complaint/completenessSlice'
 
 function summarizeUpdate(extractedFields) {
   const changedKeys = Object.keys(extractedFields)
@@ -35,6 +37,8 @@ function ChatPanel() {
 
       dispatch(fieldsUpdated(result.extracted_fields))
       dispatch(riskAssessmentUpdated(result.risk_assessment))
+      dispatch(rootCauseUpdated(result.root_cause_recommendation))
+      dispatch(completenessUpdated(result.completeness))
       addMessage('assistant', summarizeUpdate(result.extracted_fields))
     } catch (error) {
       addMessage('assistant', `Something went wrong: ${error.message}`)

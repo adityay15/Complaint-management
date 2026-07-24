@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { saveComplaint } from '../../api/extractApi'
 import { formReset } from './complaintFormSlice'
 import { riskReset } from './riskAssessmentSlice'
+import { rootCauseReset } from './rootCauseSlice'
+import { completenessReset } from './completenessSlice'
 
 const FIELD_GROUPS = [
   {
@@ -41,11 +43,13 @@ function ComplaintForm() {
   const dispatch = useDispatch()
   const formState = useSelector((state) => state.complaintForm)
   const riskState = useSelector((state) => state.riskAssessment)
+  const completeness = useSelector((state) => state.completeness)
 
   const [isSaving, setIsSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState(null)
 
   const isFormEmpty = Object.values(formState).every((value) => !value)
+  const canSave = !isFormEmpty && completeness.is_complete
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -67,6 +71,8 @@ function ComplaintForm() {
   const handleReset = () => {
     dispatch(formReset())
     dispatch(riskReset())
+    dispatch(rootCauseReset())
+    dispatch(completenessReset())
     setSaveStatus(null)
   }
 
@@ -77,6 +83,20 @@ function ComplaintForm() {
         This form is filled and updated by the AI assistant — describe the
         complaint in the chat panel to get started.
       </p>
+
+      {!isFormEmpty && completeness.missing_critical.length > 0 && (
+        <div className="complaint-form__warning">
+          <strong>⚠️ Missing Critical Fields:</strong>
+          <p>{completeness.missing_critical.join(', ')}</p>
+        </div>
+      )}
+
+      {!isFormEmpty && completeness.missing_recommended.length > 0 && (
+        <div className="complaint-form__info">
+          <strong>💡 Recommended Fields:</strong>
+          <p>{completeness.missing_recommended.join(', ')}</p>
+        </div>
+      )}
 
       {FIELD_GROUPS.map((group) => (
         <fieldset key={group.title} className="complaint-form__group">
@@ -116,7 +136,8 @@ function ComplaintForm() {
           type="button"
           className="complaint-form__save"
           onClick={handleSave}
-          disabled={isSaving || isFormEmpty}
+          disabled={isSaving || !canSave}
+          title={!canSave && !isFormEmpty ? 'Please fill all critical fields' : ''}
         >
           {isSaving ? 'Saving...' : 'Save Complaint'}
         </button>

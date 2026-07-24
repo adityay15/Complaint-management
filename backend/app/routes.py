@@ -12,6 +12,7 @@ from app.schemas import (
     DocumentParseResponse,
 )
 from app.graph import complaint_workflow
+from app.completeness import check_completeness
 
 router = APIRouter()
 
@@ -24,9 +25,14 @@ def extract_complaint(payload: ComplaintState):
             "user_message": payload.user_message,
         }
     )
+    merged_form = {**payload.current_form, **result["extracted_fields"]}
+    completeness = check_completeness(merged_form)
+
     return ComplaintDelta(
         extracted_fields=result["extracted_fields"],
         risk_assessment=result["risk_assessment"],
+        root_cause_recommendation=result["root_cause_recommendation"],
+        completeness=completeness,
     )
 
 

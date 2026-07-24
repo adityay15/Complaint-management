@@ -15,9 +15,22 @@ class RiskAssessment(BaseModel):
     suggested_next_action: str
 
 
+class RootCauseRecommendation(BaseModel):
+    root_cause: str
+    investigation_steps: str
+
+
+class Completeness(BaseModel):
+    is_complete: bool
+    missing_critical: list
+    missing_recommended: list
+
+
 class ComplaintDelta(BaseModel):
     extracted_fields: dict
     risk_assessment: RiskAssessment
+    root_cause_recommendation: RootCauseRecommendation
+    completeness: Completeness
 
 
 class DocumentParseResponse(BaseModel):
